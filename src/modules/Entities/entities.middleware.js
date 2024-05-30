@@ -1,3 +1,4 @@
+import { errorMessagesEntities } from '../../common/utils/errorsMessages.js';
 import { catchAsync, AppError } from '../../errors/index.js'
 import { EntitiesService } from './entities.service.js'
 
@@ -9,7 +10,7 @@ export const validateExistEntity = catchAsync(async (req, res, next) => {
     const entity = await entitiesService.findOneEntities(id, entityId)
 
     if (!entity) {
-        return next(new AppError(`Entity whit id ${id} not found`, 404))
+        return next(new AppError(errorMessagesEntities.entityNotExist, 404))
     }
 
     req.entity = entity

@@ -4,7 +4,7 @@ import { envs } from '../../config/enviroments/enviroments.js';
 import { UserServices } from './users_service.js';
 import { catchAsync } from '../../errors/index.js';
 import { AppError } from '../../errors/index.js';
-
+import { errorMessagesUsers } from '../../common/utils/errorsMessages.js';
 
 const userService = new UserServices()
 
@@ -19,7 +19,7 @@ export const protect = catchAsync(async (req, res, next) => {
 
   if (!token) {
     return next(
-      new AppError('You are not logged in! Please log in to get access', 401)
+      new AppError(errorMessagesUsers.userToken, 401)
     );
   }
 
@@ -44,7 +44,7 @@ export const restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.sessionUser.role)) {
       return next(
-        new AppError('You do not have permission to perfom this action.!', 403)
+        new AppError(errorMessagesUsers.userPermissions, 403)
       );
     }
 
@@ -56,7 +56,7 @@ export const protectAccountOwner = catchAsync(async (req, res, next) => {
   const { user, sessionUser } = req;
 
   if (user?.id !== sessionUser?.id) {
-    return next(new AppError('You do not own this account.', 401));
+    return next(new AppError(errorMessagesUsers.userOwnAccount, 401));
   }
 
   next();
@@ -68,7 +68,7 @@ export const validExistUser = catchAsync(async (req, res, next) => {
   const user = await userService.findOneById(id)
 
   if (!user) {
-    return next(new AppError('This user does not exist', 404));
+    return next(new AppError(errorMessagesUsers.userNotExist, 404));
   }
 
   req.user = user;
