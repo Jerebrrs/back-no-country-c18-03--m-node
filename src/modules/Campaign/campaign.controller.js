@@ -40,7 +40,7 @@ export const createCampaign = catchAsync(async (req, res, next) => {
     const entity = await entitiesService.findOneEntities(id);
 
     if (!entity) {
-        return next(new AppError(errorMessagesCampaing.campaingIntity, 404));
+        return next(new AppError(errorMessagesCampaing.campaingEntity, 404));
     };
 
     const campaign = await campaignService.createCampaign(campaignData);
@@ -72,7 +72,7 @@ export const updateCampaign = catchAsync(async (req, res, next) => {
 
     const updateCampaign = await campaignService.updateCampaign(campaing, campaignData);
 
-    return res.status(200).json(updateCampaign);
+    return res.status(200).json(sucessMessage.campaingUpdate, updateCampaign);
 });
 
 export const deleteCampaign = catchAsync(async (req, res, next) => {
