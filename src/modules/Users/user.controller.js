@@ -79,9 +79,15 @@ export const updateUser = catchAsync(async (req, res, next) => {
     });
   }
 
-  const { user } = req;
+  const { id } = req.params;
 
-  const updatedUser = await userService.updateUser(user, req.body);
+  const user = await userService.findOneById(id)
+
+  if (!user) {
+    return next(new AppError(`User whit id ${id} not found`, 404))
+  }
+
+  const updatedUser = await userService.updateUser(user, userData);
 
   return res.status(200).json(updatedUser);
 });
@@ -100,25 +106,22 @@ export const deleteUser = catchAsync(async (req, res, next) => {
   return res.status(200).json();
 });
 
-export const findAllOrders = catchAsync(async (req, res, next) => {
+export const findAllUser = catchAsync(async (req, res, next) => {
+  const user = await userService.findAll()
 
-  const { sessionUser: user } = req
-
-  const orders = await orderService.findAllOrders(user?.id);
-
-  return res.status(200).json(orders);
+  return res.status(200).json(user)
 })
 
-export const findOneOrder = catchAsync(async (req, res, next) => {
-  const { id } = req.params
+export const findOneUser = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
 
-  const order = await orderService.findOneOrder(id)
+  const user = await userService.findOneById(id)
 
-  if (!order) {
-    return next(new AppError(`Order whit id ${id} not found`, 404))
+  if (!user) {
+    return next(new AppError(`User whit id ${id} not found`, 404))
   }
 
-  return res.status(200).json(order)
+  return res.status(200).json(user)
 })
 
 

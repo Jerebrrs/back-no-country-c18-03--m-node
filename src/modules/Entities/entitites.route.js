@@ -1,7 +1,4 @@
 import express from 'express'
-
-export const router = express.Router();
-
 import {
     findAllEntities,
     findOneEntity,
@@ -9,9 +6,10 @@ import {
     updateEntities,
     deleteEntity
 } from './entitites.controller.js'
-
 import { validateExistEntity } from './entities.middleware.js'
 import { protect, protectAccountOwner } from '../Users/users.middleware.js'
+
+export const router = express.Router();
 
 router.post('/register', registerEntities)
 

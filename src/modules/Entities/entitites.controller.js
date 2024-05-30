@@ -17,7 +17,7 @@ export const findOneEntity = catchAsync(async (req, res, next) => {
     const entity = await entitiesService.findOneEntities(id)
 
     if (!entity) {
-        next(new AppError(`Entity whit id ${id} not found`, 404))
+        return next(new AppError(`Entity whit id ${id} not found`, 404))
     }
 
     return res.status(200).json(entity)
@@ -63,7 +63,7 @@ export const updateEntities = catchAsync(async (req, res, next) => {
     const entity = await entitiesService.findOneEntities(id)
 
     if (!entity) {
-        next(new AppError(`Entity whit id ${id} not found`, 404))
+        return next(new AppError(`Entity whit id ${id} not found`, 404))
     }
 
     const updatedEntities = await entitiesService.updateEntities(entity, entitiesData)
@@ -77,7 +77,7 @@ export const deleteEntity = catchAsync(async (req, res, next) => {
     const entity = await entitiesService.findOneEntities(id)
 
     if (!entity) {
-        next(new AppError(`Entity whit id ${id} not found`, 404))
+        return next(new AppError(`Entity whit id ${id} not found`, 404))
     }
 
     await entitiesService.deleteEntities(entity)
