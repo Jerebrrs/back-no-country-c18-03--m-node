@@ -4,9 +4,8 @@ import {
       deleteUser,
       updateUser,
       register,
-      findAllOrders,
-      findOneOrder
-} from './user.controller.js';
+      findAllUser,
+      findOneUser} from './user.controller.js';
 import {
       protect,
       protectAccountOwner,
@@ -27,10 +26,10 @@ router
       .delete(validExistUser, protectAccountOwner, deleteUser)
 
 router.route('/orders')
-      .get(findAllOrders)
+      .get(findAllUser)
 
 router.route('/orders/:id')
-      .get(findOneOrder)
+      .get(findOneUser)
 
 
 

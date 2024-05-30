@@ -6,12 +6,13 @@ import {
     deleteCampaign,
     updateCampaign
 } from './campaign.controller.js';
-
+import { uploadImageToCloudinary } from '../../config/cloudinary/uploadImage.js'
+import { upload } from '../../config/cloudinary/multer.js'
 export const router = express.Router();
 
 router.route('/')
     .get(getAllCampaigns)
-    .post(createCampaign)
+    .post(upload.single('image'), uploadImageToCloudinary, createCampaign);
 
 router.route('/:id')
     .get(campaignById)
