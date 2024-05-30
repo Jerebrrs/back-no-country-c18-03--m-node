@@ -15,7 +15,6 @@ async function main() {
 
 main()
 
-
 app.listen(envs.PORT, () => {
     console.log(`Server running on ${envs.PORT}`);
 });

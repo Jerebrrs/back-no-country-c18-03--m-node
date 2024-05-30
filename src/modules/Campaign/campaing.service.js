@@ -1,8 +1,7 @@
 import Campaign from './campaign.model.js';
-import Entities from "../Entities/entities.model.js";
-
 
 export class CampaignService {
+
     async getAllCampaigns() {
         return await Campaign.findAll({
             where: {
@@ -10,9 +9,6 @@ export class CampaignService {
             }
         });
     }
-    async createCampaign(data) {
-        return await Campaign.create(data)
-    };
 
     async findOneById(id) {
         return await Campaign.findOne({
@@ -21,6 +17,10 @@ export class CampaignService {
                 status: true
             }
         })
+    };
+
+    async createCampaign(data) {
+        return await Campaign.create(data)
     };
 
     async updateCampaign(campaign, data) {

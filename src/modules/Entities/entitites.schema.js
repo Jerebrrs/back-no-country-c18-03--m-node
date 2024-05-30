@@ -1,5 +1,4 @@
 import z from "zod"
-
 import { extractValidationData } from "../../common/utils/extractErrorData.js"
 
 const entitiesSchema = z.object({

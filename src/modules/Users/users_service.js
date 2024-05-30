@@ -3,8 +3,12 @@ import User from "./user.model.js"
 
 export class UserServices {
 
-    async createUser(data) {
-        return await User.create(data)
+    async findAll() {
+        return await User.findAll({
+            where: {
+                status: true
+            }
+        })
     }
 
     async findOneById(id) {
@@ -14,6 +18,10 @@ export class UserServices {
                 status: true
             }
         })
+    }
+
+    async createUser(data) {
+        return await User.create(data)
     }
 
     async updateUser(user, data) {
@@ -27,27 +35,13 @@ export class UserServices {
     }
 
     async findUserByEmail(email) {
-        let user = await User.findOne({where: {email}})
+        let user = await User.findOne({ where: { email } })
 
-        if(!user){
-            user = await Entities.findOne({where: {email}})
+        if (!user) {
+            user = await Entities.findOne({ where: { email } })
         }
 
         return user;
     }
 
 }
-
-// const findUserByEmail = async (email) => {
-//     let user = await Donante.findOne({ where: { email } });
-    
-//     if (!user) {
-//       user = await Entidad.findOne({ where: { email } });
-//     }
-  
-//     return user;
-//   };
-  
-//   export const userService = {
-//     findUserByEmail,
-//   };
