@@ -2,6 +2,8 @@ import { catchAsync, AppError } from '../../errors/index.js'
 import { validateRegisterEntities, validatePartialEntities } from './entitites.schema.js'
 import { EntitiesService } from './entities.service.js'
 import generateJWT from '../../config/plugins/generate-JWT.js';
+import { errorMessagesEntities } from '../../common/utils/errorsMessages.js';
+import { sucessMessage } from '../../common/utils/sucessMessage.js';
 
 export const entitiesService = new EntitiesService()
 
@@ -17,7 +19,7 @@ export const findOneEntity = catchAsync(async (req, res, next) => {
     const entity = await entitiesService.findOneEntities(id)
 
     if (!entity) {
-        return next(new AppError(`Entity whit id ${id} not found`, 404))
+        return next(new AppError(errorMessagesEntities.entityNotExist, 404))
     }
 
     return res.status(200).json(entity)
@@ -63,12 +65,12 @@ export const updateEntities = catchAsync(async (req, res, next) => {
     const entity = await entitiesService.findOneEntities(id)
 
     if (!entity) {
-        return next(new AppError(`Entity whit id ${id} not found`, 404))
+        return next(new AppError(errorMessagesEntities.entityNotExist, 404))
     }
 
     const updatedEntities = await entitiesService.updateEntities(entity, entitiesData)
 
-    return res.status(200).json(updatedEntities)
+    return res.status(200).json(sucessMessage.entityUpdate, updatedEntities)
 })
 
 export const deleteEntity = catchAsync(async (req, res, next) => {
@@ -77,13 +79,10 @@ export const deleteEntity = catchAsync(async (req, res, next) => {
     const entity = await entitiesService.findOneEntities(id)
 
     if (!entity) {
-        return next(new AppError(`Entity whit id ${id} not found`, 404))
+        return next(new AppError(errorMessagesEntities.entityNotExist, 404))
     }
 
     await entitiesService.deleteEntities(entity)
 
-    return res.status(200).json({
-        status: 'succes',
-        message: 'Entity deleted successfully'
-    })
+    return res.status(200).json(sucessMessage.entityDelete)
 })

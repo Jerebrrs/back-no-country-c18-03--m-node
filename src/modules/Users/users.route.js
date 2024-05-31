@@ -4,8 +4,8 @@ import {
       deleteUser,
       updateUser,
       register,
-      findAllOrders,
-      findOneOrder
+      findAllUser,
+      findOneUser
 } from './user.controller.js';
 import {
       protect,
@@ -19,18 +19,14 @@ router.post("/login", login)
 
 router.post("/register", register)
 
+router.route('/')
+      .get(findAllUser)
+
+router.route('/:id')
+      .get(findOneUser)
+
 router.use(protect)
 
-router
-      .route('/:id')
+router.route('/:id')
       .patch(validExistUser, protectAccountOwner, updateUser)
       .delete(validExistUser, protectAccountOwner, deleteUser)
-
-router.route('/orders')
-      .get(findAllOrders)
-
-router.route('/orders/:id')
-      .get(findOneOrder)
-
-
-

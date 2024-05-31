@@ -2,6 +2,8 @@ import { AppError, catchAsync } from '../../errors/index.js';
 import { entitiesService } from '../Entities/entitites.controller.js';
 import { validatePostCampaign, campaignUpdate } from './campaign.schema.js';
 import { CampaignService } from './campaing.service.js';
+import { errorMessagesCampaing } from '../../common/utils/errorsMessages.js';
+import { sucessMessage } from '../../common/utils/sucessMessage.js';
 
 const campaignService = new CampaignService();
 
@@ -17,7 +19,7 @@ export const campaignById = catchAsync(async (req, res, next) => {
     const campaign = await campaignService.findOneById(id);
 
     if (!campaign) {
-        return next(new AppError('This campaingn does not exist', 404));
+        return next(new AppError(errorMessagesCampaing.campaingNotExist, 404));
     };
 
     return res.status(200).json(campaign);
@@ -38,13 +40,13 @@ export const createCampaign = catchAsync(async (req, res, next) => {
     const entity = await entitiesService.findOneEntities(id);
 
     if (!entity) {
-        return next(new AppError('This entity does not exist', 404));
+        return next(new AppError(errorMessagesCampaing.campaingEntity, 404));
     };
 
     const campaign = await campaignService.createCampaign(campaignData);
 
     if (!campaign) {
-        return next(new AppError('This campaign does not exist', 404));
+        return next(new AppError(errorMessagesCampaing.campaingNotExist, 404));
     };
 
     return res.status(201).json(campaign);
@@ -65,12 +67,12 @@ export const updateCampaign = catchAsync(async (req, res, next) => {
     const campaing = await campaignService.findOneById(id);
 
     if (!campaing) {
-        return next(new AppError('This campaing does not exist', 404));
+        return next(new AppError(errorMessagesCampaing.campaingNotExist, 404));
     };
 
     const updateCampaign = await campaignService.updateCampaign(campaing, campaignData);
 
-    return res.status(200).json(updateCampaign);
+    return res.status(200).json(sucessMessage.campaingUpdate, updateCampaign);
 });
 
 export const deleteCampaign = catchAsync(async (req, res, next) => {
@@ -79,10 +81,10 @@ export const deleteCampaign = catchAsync(async (req, res, next) => {
     const campaign = await campaignService.findOneById(id);
 
     if (!campaign) {
-        return next(new AppError('This campaign does not exist', 404));
+        return next(new AppError(errorMessagesCampaing.campaingNotExist, 404));
     }
 
     await campaignService.deleteCampaign(campaign);
 
-    return res.status(200).json({ message: 'Campaign deleted successfully' });
+    return res.status(200).json({ message: sucessMessage.campaingDelete });
 });

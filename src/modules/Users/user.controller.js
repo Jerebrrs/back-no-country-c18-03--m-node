@@ -7,6 +7,8 @@ import {
 import { UserServices } from './users_service.js';
 import generateJWT from '../../config/plugins/generate-JWT.js';
 import { verifyPassword } from '../../config/plugins/encrypted-password.js';
+import { errorMessagesUsers } from '../../common/utils/errorsMessages.js';
+import { sucessMessage } from '../../common/utils/sucessMessage.js';
 
 const userService = new UserServices();
 
@@ -23,7 +25,7 @@ export const login = catchAsync(async (req, res, next) => {
   const user = await userService.findUserByEmail(userData.email);
 
   if (!user) {
-    return next(new AppError('This user does not exist', 404));
+    return next(new AppError(errorMessagesUsers.userNotExist, 404));
   }
 
   const isCorrectPassword = await verifyPassword(
@@ -32,7 +34,7 @@ export const login = catchAsync(async (req, res, next) => {
   );
 
   if (!isCorrectPassword) {
-    return next(new AppError('incorrect Email or Password', 401));
+    return next(new AppError(errorMessagesUsers.userEmailOrPassword, 401));
   }
 
   const token = await generateJWT(user.id);
@@ -84,7 +86,7 @@ export const updateUser = catchAsync(async (req, res, next) => {
   const user = await userService.findOneById(id)
 
   if (!user) {
-    return next(new AppError(`User whit id ${id} not found`, 404))
+    return next(new AppError(errorMessagesUsers.userNotExist, 404))
   }
 
   const updatedUser = await userService.updateUser(user, userData);
@@ -98,12 +100,12 @@ export const deleteUser = catchAsync(async (req, res, next) => {
   const user = await userService.findOneById(id)
 
   if (!user) {
-    return next(new AppError('This user does not exist', 404));
+    return next(new AppError(errorMessagesUsers.userNotExist, 404));
   }
 
   await userService.deleteUser(user);
 
-  return res.status(200).json();
+  return res.status(200).json(sucessMessage.userDelete);
 });
 
 export const findAllUser = catchAsync(async (req, res, next) => {
@@ -118,7 +120,7 @@ export const findOneUser = catchAsync(async (req, res, next) => {
   const user = await userService.findOneById(id)
 
   if (!user) {
-    return next(new AppError(`User whit id ${id} not found`, 404))
+    return next(new AppError(errorMessagesUsers.userNotExist, 404))
   }
 
   return res.status(200).json(user)
