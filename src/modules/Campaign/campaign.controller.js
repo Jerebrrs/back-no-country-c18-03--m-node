@@ -72,7 +72,7 @@ export const updateCampaign = catchAsync(async (req, res, next) => {
 
     const updateCampaign = await campaignService.updateCampaign(campaing, campaignData);
 
-    return res.status(200).json(sucessMessage.campaingUpdate, updateCampaign);
+    return res.status(200).json(updateCampaign);
 });
 
 export const deleteCampaign = catchAsync(async (req, res, next) => {

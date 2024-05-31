@@ -5,7 +5,8 @@ import {
       updateUser,
       register,
       findAllUser,
-      findOneUser} from './user.controller.js';
+      findOneUser
+} from './user.controller.js';
 import {
       protect,
       protectAccountOwner,
@@ -18,18 +19,14 @@ router.post("/login", login)
 
 router.post("/register", register)
 
-router.use(protect)
-
-router
-      .route('/:id')
-      .patch(validExistUser, protectAccountOwner, updateUser)
-      .delete(validExistUser, protectAccountOwner, deleteUser)
-
-router.route('/orders')
+router.route('/')
       .get(findAllUser)
 
-router.route('/orders/:id')
+router.route('/:id')
       .get(findOneUser)
 
+router.use(protect)
 
-
+router.route('/:id')
+      .patch(validExistUser, protectAccountOwner, updateUser)
+      .delete(validExistUser, protectAccountOwner, deleteUser)
