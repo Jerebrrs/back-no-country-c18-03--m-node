@@ -91,7 +91,7 @@ export const updateUser = catchAsync(async (req, res, next) => {
 
   const updatedUser = await userService.updateUser(user, userData);
 
-  return res.status(200).json(sucessMessage.userUpdate, updatedUser);
+  return res.status(200).json(updatedUser);
 });
 
 export const deleteUser = catchAsync(async (req, res, next) => {
