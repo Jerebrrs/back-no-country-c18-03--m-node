@@ -1,25 +1,26 @@
 import express from 'express';
 import {
-    getAllCampaigns,
-    campaignById,
-    createCampaign,
-    deleteCampaign,
-    updateCampaign
+  getAllCampaigns,
+  campaignById,
+  createCampaign,
+  deleteCampaign,
+  updateCampaign,
 } from './campaign.controller.js';
-
-import { uploadImageToCloudinary } from '../../config/cloudinary/uploadImage.js'
-
-import { upload } from '../../config/cloudinary/multer.js'
+import { uploadImageToCloudinary } from '../../config/cloudinary/uploadImage.js';
+import { upload } from '../../config/cloudinary/multer.js';
+import { authenticateEntiti } from './middlewareCampaign.js';
 
 export const router = express.Router();
 
-router.route('/')
-    .get(getAllCampaigns)
+router.use(authenticateEntiti);
 
+router
+  .route('/')
+  .get(getAllCampaigns)
+  .post(upload.single('image'), uploadImageToCloudinary, createCampaign);
 
-router.route('/:id')
-    .get(campaignById)
-    .patch(updateCampaign)
-    .delete(deleteCampaign)
-    .post(upload.single('image'), uploadImageToCloudinary, createCampaign);
-
+router
+  .route('/:id')
+  .get(campaignById)
+  .patch(updateCampaign)
+  .delete(deleteCampaign);
