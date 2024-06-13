@@ -6,7 +6,7 @@ import { catchAsync } from '../../errors/index.js';
 import { AppError } from '../../errors/index.js';
 import { errorMessagesUsers } from '../../common/utils/errorsMessages.js';
 
-const userService = new UserServices()
+const userService = new UserServices();
 
 export const protect = catchAsync(async (req, res, next) => {
   let token;
@@ -18,34 +18,46 @@ export const protect = catchAsync(async (req, res, next) => {
   }
 
   if (!token) {
-    return next(
-      new AppError(errorMessagesUsers.userToken, 401)
-    );
+    return next(new AppError(errorMessagesUsers.userToken, 401));
   }
 
-  const decoded = await promisify(jwt.verify)(
-    token,
-    envs.SECRET_JWD_SEED
-  );
+  const decoded = await promisify(jwt.verify)(token, envs.SECRET_JWD_SEED);
 
-  const user = await userService.findOneById(decoded.id)
+  const user = await userService.findOneById(decoded.id);
+  try {
+    const decoded = await verifyToken(token, envs.SECRET_JWT_SEED);
+    console.log('Decoded token:', decoded);
 
-  if (!user) {
-    return next(
-      new AppError('The owner of this token it not longer available', 401)
-    );
+    const user = await userService.findOneByID(decoded.id);
+    console.log('User from token:', user);
+
+    if (!user) {
+      console.log('User not found');
+      return next(
+        new AppError('The owner of this token is no longer available', 401)
+      );
+    }
+
+    req.sessionUser = user;
+    next();
+  } catch (err) {
+    console.log('Token verification failed', err);
+    return next(new AppError('Token verification failed', 401));
   }
+  // if (!user) {
+  //   return next(
+  //     new AppError('The owner of this token it not longer available', 401)
+  //   );
+  // }
 
-  req.sessionUser = user;
-  next();
+  // req.sessionUser = user;
+  // next();
 });
 
 export const restrictTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.sessionUser.role)) {
-      return next(
-        new AppError(errorMessagesUsers.userPermissions, 403)
-      );
+      return next(new AppError(errorMessagesUsers.userPermissions, 403));
     }
 
     next();
@@ -63,14 +75,14 @@ export const protectAccountOwner = catchAsync(async (req, res, next) => {
 });
 
 export const validExistUser = catchAsync(async (req, res, next) => {
-  const { id } = req.params
+  const { id } = req.params;
 
-  const user = await userService.findOneById(id)
+  const user = await userService.findOneById(id);
 
   if (!user) {
     return next(new AppError(errorMessagesUsers.userNotExist, 404));
   }
 
   req.user = user;
-  next()
-})
+  next();
+});

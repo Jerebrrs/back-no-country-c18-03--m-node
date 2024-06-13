@@ -9,10 +9,11 @@ import {
 import { uploadImageToCloudinary } from '../../config/cloudinary/uploadImage.js';
 import { upload } from '../../config/cloudinary/multer.js';
 import { authenticateEntiti } from './middlewareCampaign.js';
+import { protect } from '../Users/users.middleware.js';
 
 export const router = express.Router();
 
-router.use(authenticateEntiti);
+// router.use(authenticateEntiti);
 
 router
   .route('/')
