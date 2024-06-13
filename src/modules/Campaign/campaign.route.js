@@ -18,7 +18,12 @@ export const router = express.Router();
 router
   .route('/')
   .get(getAllCampaigns)
-  .post(upload.single('image'), uploadImageToCloudinary, createCampaign);
+  .post(
+    upload.single('image'),
+    uploadImageToCloudinary,
+    protect,
+    createCampaign
+  );
 
 router
   .route('/:id')

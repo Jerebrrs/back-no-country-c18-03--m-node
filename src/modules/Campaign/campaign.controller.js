@@ -39,20 +39,20 @@ export const createCampaign = catchAsync(async (req, res, next) => {
 
   const { sessionUser } = req;
 
-//   if (sessionUser && sessionUser.id) {
-// console.log(sessionUser);
+  if (sessionUser && sessionUser.id) {
+console.log(sessionUser);
 
-//     campaignData.entitiId = sessionUser.id ? 10 : null;;
-//   } else {
-//     return res.status(400).json({
-//       status: 'error',
-//       message: 'Entiti ID is required',
-//     });
-//   }
+    campaignData.entitiId = sessionUser.id ? 10 : null;;
+  } else {
+    return res.status(400).json({
+      status: 'error',
+      message: 'Entiti ID is required',
+    });
+  }
 
   const campaign = await campaignService.createCampaign(
     campaignData,
-    sessionUser
+    sessionUser.id
   );
 
   if (!campaign) {
