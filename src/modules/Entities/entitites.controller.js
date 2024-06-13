@@ -70,7 +70,7 @@ export const updateEntities = catchAsync(async (req, res, next) => {
 
     const updatedEntities = await entitiesService.updateEntities(entity, entitiesData)
 
-    return res.status(200).json(sucessMessage.entityUpdate, updatedEntities)
+    return res.status(200).json(updatedEntities)
 })
 
 export const deleteEntity = catchAsync(async (req, res, next) => {

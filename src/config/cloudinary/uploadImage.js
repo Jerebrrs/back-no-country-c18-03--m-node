@@ -11,7 +11,7 @@ export const uploadImageToCloudinary = async (req, res, next) => {
         try {
             const result = await cloudinary.uploader.upload(req.file.path);
             req.body.image = result.secure_url;
-            await unlinkFile(req.file.path); // Eliminar el archivo local después de subirlo a Cloudinary
+            await unlinkFile(req.file.path);
             next();
         } catch (error) {
             return next(new AppError(errorMessagesCloudinary.cloudinaryUploadError, 500));

@@ -6,8 +6,7 @@ import {
     updateEntities,
     deleteEntity
 } from './entitites.controller.js'
-import { validateExistEntity } from './entities.middleware.js'
-import { protect, protectAccountOwner } from '../Users/users.middleware.js'
+import { protect, validateExistEntity } from './entities.middleware.js'
 
 export const router = express.Router();
 
@@ -18,7 +17,7 @@ router.route('/')
 
 router.route('/:id')
     .get(validateExistEntity, findOneEntity)
-    .patch(protect, protectAccountOwner, updateEntities)
-    .delete(protect, protectAccountOwner, deleteEntity)
+    .patch(protect, updateEntities)
+    .delete(protect, deleteEntity)
 
 
